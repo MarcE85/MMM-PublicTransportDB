@@ -53,7 +53,10 @@ DbFetcher.prototype.fetchDepartures = function () {
         direction: direction
     };
 
-    return dbClient.departures(this.config.stationId, opt).then((response) => {
+    
+    let station = (this.config.stationId).toString();
+    //return dbClient.departures(this.config.stationId, opt).then((response) => {
+    return dbClient.departures(station, opt).then((response) => {
 
         return this.processData(response)
     });
@@ -66,8 +69,8 @@ DbFetcher.prototype.processData = function (data) {
         departuresArray: []
     };
 
-    data.forEach((row) => {
-        
+    data.forEach((row) => {        
+
 	var ignored = false;
 	this.config.ignoredStations.forEach(function(element) {
             if (element == row.station.id){
@@ -96,7 +99,8 @@ DbFetcher.prototype.processData = function (data) {
                 nr: row.line.productCode,
                 type: productType.type,
                 color: productType.color,
-                direction: row.direction
+                direction: row.direction,
+		stationid: row.station.id
             };
 
             departuresData.departuresArray.push(current);
